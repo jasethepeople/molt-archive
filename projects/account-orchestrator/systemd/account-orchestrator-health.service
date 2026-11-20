@@ -1,0 +1,18 @@
+[Unit]
+Description=Account Orchestrator health checks
+
+[Service]
+Type=simple
+WorkingDirectory=/home/ubuntu/.local/share/account-orchestrator
+Environment=PATH=/home/ubuntu/node-v24.22.2-linux-arm64/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+Environment=AO_DB=/home/ubuntu/.local/share/account-orchestrator/registry.sqlite
+Environment=AO_CHECK_INTERVAL_MS=300000
+Environment=AO_CHECK_TIMEOUT_MS=3000
+Environment=AO_CHECK_CONCURRENCY=16
+ExecStart=/home/ubuntu/node-v24.22.2-linux-arm64/bin/node /home/ubuntu/.local/share/account-orchestrator/dist/src/cli.js run
+Restart=on-failure
+RestartSec=10
+TimeoutStopSec=90
+
+[Install]
+WantedBy=default.target

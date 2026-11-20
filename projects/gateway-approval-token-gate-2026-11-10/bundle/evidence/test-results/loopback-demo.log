@@ -1,0 +1,88 @@
+
+> integration-gateway-a2a@0.1.0 demo:approval-gate
+> tsx scripts/approval-gate-demo.ts
+
+{"ts":"2026-11-12T00:13:12.840Z","level":"info","ns":"native/echo","msg":"native_echo received event","data":{"hello":"approval-gate-demo"}}
+{"ts":"2026-11-12T00:13:12.854Z","level":"info","ns":"native/echo","msg":"native_echo received event","data":{"case":"replayed-token","entry":"REST"}}
+{"ts":"2026-11-12T00:13:12.878Z","level":"info","ns":"native/echo","msg":"native_echo received event","data":{"case":"replayed-token","entry":"A2A"}}
+{"ts":"2026-11-12T00:13:12.894Z","level":"info","ns":"native/echo","msg":"native_echo received event","data":{"hello":"signed-a2a-event"}}
+{"ts":"2026-11-12T00:13:12.944Z","level":"info","ns":"native/echo","msg":"native_echo received event","data":{"hello":"accepted-before-restart"}}
+{
+  "port": 3456,
+  "bind": "127.0.0.1 only",
+  "healthOk": true,
+  "nativeEchoOk": true,
+  "validA2aTokenOk": true,
+  "acceptedBeforeRestart": true,
+  "outstandingApprovalRefusedAfterRestart": true,
+  "restartMethod": "fresh server and authority instance in the same Node process",
+  "signedLedgerVerifiedBeforeRestart": true,
+  "checks": [
+    {
+      "entrypoint": "REST",
+      "bypass": "missing token",
+      "refused": true,
+      "attempts": 0,
+      "componentExecuted": false
+    },
+    {
+      "entrypoint": "REST",
+      "bypass": "expired token",
+      "refused": true,
+      "attempts": 0,
+      "componentExecuted": false
+    },
+    {
+      "entrypoint": "REST",
+      "bypass": "replayed token",
+      "refused": true,
+      "attempts": 0,
+      "componentExecuted": false,
+      "firstCallExecuted": true
+    },
+    {
+      "entrypoint": "REST",
+      "bypass": "cross-target replay",
+      "refused": true,
+      "attempts": 0,
+      "componentExecuted": false
+    },
+    {
+      "entrypoint": "A2A",
+      "bypass": "missing token",
+      "refused": true,
+      "attempts": 0,
+      "componentExecuted": false
+    },
+    {
+      "entrypoint": "A2A",
+      "bypass": "expired token",
+      "refused": true,
+      "attempts": 0,
+      "componentExecuted": false
+    },
+    {
+      "entrypoint": "A2A",
+      "bypass": "replayed token",
+      "refused": true,
+      "attempts": 0,
+      "componentExecuted": false,
+      "firstCallExecuted": true
+    },
+    {
+      "entrypoint": "A2A",
+      "bypass": "cross-target replay",
+      "refused": true,
+      "attempts": 0,
+      "componentExecuted": false
+    },
+    {
+      "entrypoint": "REST",
+      "bypass": "outstanding token after restart",
+      "refused": true,
+      "attempts": 0,
+      "componentExecuted": false
+    }
+  ],
+  "noPublicServiceOrDeployment": true
+}

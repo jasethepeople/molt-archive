@@ -1,0 +1,16 @@
+{
+  "name": "molt-reactor / SpotSignal",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/rust:1": {}
+  },
+  "postCreateCommand": "corepack enable && pnpm install --dir spot-signal",
+  "forwardPorts": [3000, 5432, 6379, 5173],
+  "portsAttributes": {
+    "3000": { "label": "SpotSignal API", "onAutoForward": "notify" },
+    "5173": { "label": "SpotSignal PWA", "onAutoForward": "notify" },
+    "5432": { "label": "SpotSignal Postgres", "onAutoForward": "silent" },
+    "6379": { "label": "SpotSignal Redis", "onAutoForward": "silent" }
+  }
+}

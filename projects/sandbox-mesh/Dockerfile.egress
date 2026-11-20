@@ -1,0 +1,7 @@
+FROM python:3.12-alpine
+WORKDIR /srv
+COPY egress_proxy.py /srv/egress_proxy.py
+COPY ingress_proxy.py /srv/ingress_proxy.py
+COPY proxy_bundle.py /srv/proxy_bundle.py
+USER 65534:65534
+ENTRYPOINT ["python3", "/srv/proxy_bundle.py"]

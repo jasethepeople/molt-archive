@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "probe_version": "0.1.0",
+  "host_id": "foundry",
+  "observed_hostname": "foundry",
+  "observed_at_epoch": 1794867473,
+  "os": {
+    "name": "Linux",
+    "release": "7.0.0-1013-oracle",
+    "machine": "aarch64",
+    "distribution": "Ubuntu 24.04.5 LTS"
+  },
+  "resources": {
+    "online_cpu_count": 1,
+    "effective_cpu_cores": 1.0,
+    "available_memory_bytes": 4400451584,
+    "disk": {
+      "total_bytes": 47321268224,
+      "free_bytes": 34451767296
+    },
+    "concurrency_cap": 1,
+    "per_sandbox_recommendation": {
+      "cpu_cores": 0.7,
+      "memory_bytes": 2200225792,
+      "pids": 128,
+      "disk_bytes": 1722588364
+    }
+  },
+  "capabilities": {
+    "docker": {
+      "installed": true,
+      "ready": true,
+      "version": "Docker version 29.9.3, build 5457199",
+      "gvisor_runtime_configured": false,
+      "runtimes": [
+        "io.containerd.runc.v2",
+        "runc"
+      ],
+      "detail": null
+    },
+    "podman": {
+      "installed": false,
+      "ready": false
+    },
+    "bubblewrap": {
+      "installed": false,
+      "usable": false
+    },
+    "nsjail": {
+      "installed": false,
+      "usable": false
+    },
+    "firejail": {
+      "installed": false
+    },
+    "runsc": {
+      "installed": false
+    },
+    "kvm": {
+      "available": false
+    },
+    "user_namespaces": {
+      "tested": false,
+      "available": false
+    },
+    "cgroups": {
+      "version": 2,
+      "controllers": [
+        "cpuset",
+        "cpu",
+        "io",
+        "memory",
+        "hugetlb",
+        "pids",
+        "rdma",
+        "misc",
+        "dmem"
+      ],
+      "cpu_quota_cores": null,
+      "memory_limit_bytes": null,
+      "memory_current_bytes": null,
+      "pids_limit": null,
+      "v2_controllers_writable": false
+    },
+    "systemd": {
+      "installed": true,
+      "active_as_pid1": true
+    },
+    "fallback3": {
+      "network_namespace": false,
+      "ulimits": true,
+      "ready": false,
+      "tested_uid": 1001,
+      "detail": "non-root network isolation or resource-limit smoke test failed"
+    }
+  },
+  "open_ports": [
+    {
+      "protocol": "tcp",
+      "port": 22
+    },
+    {
+      "protocol": "tcp",
+      "port": 53
+    },
+    {
+      "protocol": "tcp",
+      "port": 111
+    },
+    {
+      "protocol": "tcp",
+      "port": 3000
+    },
+    {
+      "protocol": "tcp",
+      "port": 3100
+    },
+    {
+      "protocol": "tcp",
+      "port": 3101
+    },
+    {
+      "protocol": "tcp",
+      "port": 3105
+    },
+    {
+      "protocol": "tcp",
+      "port": 3106
+    },
+    {
+      "protocol": "tcp",
+      "port": 3306
+    },
+    {
+      "protocol": "tcp",
+      "port": 4173
+    },
+    {
+      "protocol": "tcp",
+      "port": 5432
+    },
+    {
+      "protocol": "tcp",
+      "port": 8000
+    },
+    {
+      "protocol": "tcp",
+      "port": 8001
+    },
+    {
+      "protocol": "tcp",
+      "port": 46209
+    },
+    {
+      "protocol": "tcp",
+      "port": 65300
+    },
+    {
+      "protocol": "udp",
+      "port": 53
+    },
+    {
+      "protocol": "udp",
+      "port": 68
+    },
+    {
+      "protocol": "udp",
+      "port": 111
+    },
+    {
+      "protocol": "udp",
+      "port": 41641
+    }
+  ],
+  "sandbox_driver": "docker",
+  "driver_rationale": "Docker/runc is the only measured container driver on Foundry; no gVisor or KVM runtime is configured.",
+  "requires_user_approval_before_untrusted_execution": false,
+  "repository_execution_enabled": false,
+  "warnings": []
+}

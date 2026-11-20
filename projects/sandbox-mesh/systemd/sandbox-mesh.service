@@ -1,0 +1,24 @@
+[Unit]
+Description=Sandbox Mesh control plane
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/sandbox-mesh
+Environment=PYTHONPATH=%h/sandbox-mesh
+Environment=PYTHONUNBUFFERED=1
+Environment=SANDBOX_MESH_HOST_ID=foundry
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/usr/bin/python3 -m mesh.server --project-root %h/sandbox-mesh
+Restart=on-failure
+RestartSec=10
+UMask=0077
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ReadWritePaths=%h/sandbox-mesh
+LimitNOFILE=4096
+
+[Install]
+WantedBy=default.target

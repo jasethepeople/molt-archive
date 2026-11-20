@@ -1,0 +1,29 @@
+{
+  "name": "account-orchestrator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local account and service registry with live health checks for the Account Orchestrator (working title).",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "ao": "./dist/src/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "seed": "node dist/src/seed.js",
+    "verify": "node dist/src/verify.js",
+    "ao": "node dist/src/cli.js",
+    "test": "npm run build && node --test 'dist/tests/*.test.js'",
+    "clean": "rm -rf dist data/*.sqlite data/seed-report.json"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.5.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/node": "^22.9.0",
+    "typescript": "^5.6.3"
+  }
+}

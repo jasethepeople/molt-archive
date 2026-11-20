@@ -1,0 +1,79 @@
+{
+  "port": 3456,
+  "bind": "127.0.0.1 only",
+  "healthOk": true,
+  "nativeEchoOk": true,
+  "validA2aTokenOk": true,
+  "acceptedBeforeRestart": true,
+  "outstandingApprovalRefusedAfterRestart": true,
+  "restartMethod": "fresh server and authority instance in the same Node process",
+  "signedLedgerVerifiedBeforeRestart": true,
+  "checks": [
+    {
+      "entrypoint": "REST",
+      "bypass": "missing token",
+      "refused": true,
+      "attempts": 0,
+      "componentExecuted": false
+    },
+    {
+      "entrypoint": "REST",
+      "bypass": "expired token",
+      "refused": true,
+      "attempts": 0,
+      "componentExecuted": false
+    },
+    {
+      "entrypoint": "REST",
+      "bypass": "replayed token",
+      "refused": true,
+      "attempts": 0,
+      "componentExecuted": false,
+      "firstCallExecuted": true
+    },
+    {
+      "entrypoint": "REST",
+      "bypass": "cross-target replay",
+      "refused": true,
+      "attempts": 0,
+      "componentExecuted": false
+    },
+    {
+      "entrypoint": "A2A",
+      "bypass": "missing token",
+      "refused": true,
+      "attempts": 0,
+      "componentExecuted": false
+    },
+    {
+      "entrypoint": "A2A",
+      "bypass": "expired token",
+      "refused": true,
+      "attempts": 0,
+      "componentExecuted": false
+    },
+    {
+      "entrypoint": "A2A",
+      "bypass": "replayed token",
+      "refused": true,
+      "attempts": 0,
+      "componentExecuted": false,
+      "firstCallExecuted": true
+    },
+    {
+      "entrypoint": "A2A",
+      "bypass": "cross-target replay",
+      "refused": true,
+      "attempts": 0,
+      "componentExecuted": false
+    },
+    {
+      "entrypoint": "REST",
+      "bypass": "outstanding token after restart",
+      "refused": true,
+      "attempts": 0,
+      "componentExecuted": false
+    }
+  ],
+  "noPublicServiceOrDeployment": true
+}

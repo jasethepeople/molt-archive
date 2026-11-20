@@ -1,0 +1,41 @@
+[package]
+name = "molt-kernel"
+version = "0.1.0-alpha.2"
+edition = "2021"
+license = "Apache-2.0"
+description = "MOLT protocol kernel: durable event history, deterministic replay, resources, and experiment provenance"
+
+[dependencies]
+blake3 = "1.5"
+chacha20poly1305 = "0.11.0"
+ed25519-dalek = { version = "2.1", features = ["rand_core"] }
+hex = "0.4"
+rand = "0.8"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sha2 = "0.10"
+thiserror = "1.0"
+zeroize = "1.9.1"
+
+[dev-dependencies]
+proptest = "1.5"
+tempfile = "3.27"
+
+[lib]
+path = "kernel/mod.rs"
+
+[[bin]]
+name = "molt-receipts"
+path = "src/bin/molt_receipts.rs"
+
+[[bin]]
+name = "molt-audit"
+path = "src/bin/molt_audit.rs"
+
+[[bin]]
+name = "ghost-vault"
+path = "src/bin/ghost_vault.rs"
+
+[[bin]]
+name = "ghost-bid"
+path = "src/bin/ghost_bid.rs"

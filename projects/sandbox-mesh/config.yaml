@@ -1,0 +1,105 @@
+schema_version: 1
+phase: 2
+host_id: foundry
+driver: docker
+control_plane:
+  bind_host: 127.0.0.1
+  port: 8787
+  authentication_required: true
+  session_ttl_seconds: 28800
+  max_request_bytes: 32768
+  database_path: data/sandbox-mesh.sqlite3
+resources:
+  concurrency_cap: 1
+scheduler:
+  default_concurrency_cap: 3
+  max_concurrency_cap: 3
+  capacity_reserve_memory_bytes: 1073741824
+  host_concurrency_caps:
+    foundry: 1
+  retry_interval_seconds: 1
+  host_guard:
+    max_1m_load_per_cpu: 1.0
+    min_available_memory_bytes: 2200225792
+agent:
+  heartbeat_interval_seconds: 5
+  silent_after_seconds: 15
+  supervisor_sha256: 0de3a9ec0cfe7396d6f3e0380f0ed96c492b9c37fb1b59f8d32d625b7175bdc3
+sandbox:
+  allow_untrusted_execution: true
+  default_ttl_seconds: 1800
+  platform: linux/arm64
+  cpu_cores: 0.7
+  memory_bytes: 1610612736
+  pids_limit: 128
+  tmpfs_bytes: 67108864
+  user: "65532:65532"
+  port_range: [8900, 8999]
+  build_timeout_seconds: 1800
+  healthcheck_timeout_seconds: 30
+  clone_timeout_seconds: 180
+  max_checkout_bytes: 536870912
+  clone_cache_entries: 8
+  image_cache_entries: 3
+  max_image_bytes: 2147483648
+egress:
+  default_deny: true
+  allowlist:
+    - auth.docker.io
+    - buildpacks.cloudfoundry.org
+    - cache-nixos-org.global.ssl.fastly.net
+    - cache.nixos.org
+    - channels.nixos.org
+    - codeload.github.com
+    - dl-cdn.alpinelinux.org
+    - files.pythonhosted.org
+    - github.com
+    - downloads.python.org
+    - ghcr.io
+    - index.crates.io
+    - nodejs.org
+    - objects.githubusercontent.com
+    - pkg-containers.githubusercontent.com
+    - pypi.org
+    - releases.nixos.org
+    - production.cloudfront.docker.com
+    - proxy.golang.org
+    - python.org
+    - registry-1.docker.io
+    - registry.npmjs.org
+    - registry.yarnpkg.com
+    - release-assets.githubusercontent.com
+    - rustup.rs
+    - static.crates.io
+    - static.rust-lang.org
+    - storage.googleapis.com
+    - sum.golang.org
+    - www.python.org
+  proxy_image: sandbox-mesh/egress-proxy:1
+  ingress_port: 8081
+build:
+  engine: nixpacks
+  buildx_version: 0.39.0
+  buildx_sha256: 722cdcdfdd6f3fb943fa1ba75102d057feb18ba72aab93b1b0a8cf2b2b48a25f
+  nixpacks_version: 1.41.0
+  nixpacks_sha256: 912bd02dd2bb6f9c3a9ed965fe8a68b4aa318dc7a2546e2eca6f2806a894ba39
+  nixpacks_base_image: ghcr.io/railwayapp/nixpacks:ubuntu-1745885067
+  buildkit_version: 0.35.0
+  buildkit_image: moby/buildkit:v0.35.0
+  buildkit_container: buildx_buildkit_sandbox-mesh-builder0
+  buildkit_builder: sandbox-mesh-builder
+  buildkit_memory_bytes: 1610612736
+  buildkit_cpu_cores: 0.7
+  buildkit_pids_limit: 128
+  buildkit_max_parallelism: 1
+warm_pool:
+  enabled: true
+  image: node:22-alpine
+demo:
+  fixtures_enabled: true
+features:
+  phase_1: true
+  phase_2: true
+  phase_3: false
+  phase_4: false
+  phase_5: false

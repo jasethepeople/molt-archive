@@ -1,0 +1,21 @@
+{
+  "name": "spot-signal",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@12.18.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/server.mjs",
+    "bot": "node src/bot.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "fastify": "^5.6.0",
+    "leaflet": "^1.9.4",
+    "pg": "^8.16.3",
+    "telegraf": "^4.16.3"
+  }
+}

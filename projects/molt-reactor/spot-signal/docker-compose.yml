@@ -1,0 +1,119 @@
+services:
+  db:
+    image: postgis/postgis:16-3.4-alpine
+    environment:
+      POSTGRES_DB: spotsignal
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?run scripts/codespace-up.sh first}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD:?run scripts/codespace-up.sh first}
+    volumes:
+      - spotsignal-db:/var/lib/postgresql/data
+      - ./db-init:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d spotsignal"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports:
+      - "127.0.0.1:6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["node", "src/server.mjs"]
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 3000
+      SECURE_COOKIES: ${SECURE_COOKIES:-true}
+      SPOTSIGNAL_STORE: postgres
+      DATABASE_URL: ${DATABASE_URL:?run scripts/codespace-up.sh first}
+      APP_HMAC_SECRET: ${APP_HMAC_SECRET:?run scripts/codespace-up.sh first}
+      MODERATION_TOKEN: ${MODERATION_TOKEN:-}
+      BOT_INGEST_TOKEN: ${BOT_INGEST_TOKEN:?run scripts/codespace-up.sh first}
+      ACTIVITY_ALERTS_ENABLED: ${ACTIVITY_ALERTS_ENABLED:-false}
+      COORD_FUZZ_DEGREES: ${COORD_FUZZ_DEGREES:-0.0005}
+      SENSITIVE_CELL_MULTIPLIER: ${SENSITIVE_CELL_MULTIPLIER:-6}
+      RESOURCE_CELL_MULTIPLIER: ${RESOURCE_CELL_MULTIPLIER:-2}
+      PUBLISH_DELAY_MS: ${PUBLISH_DELAY_MS:-900000}
+      ACTIVITY_PUBLISH_DELAY_MS: ${ACTIVITY_PUBLISH_DELAY_MS:-3600000}
+    ports:
+      - "127.0.0.1:3000:3000"
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+      start_period: 20s
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:5173:5173"
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx:rw,noexec,nosuid,size=8m
+      - /var/run:rw,noexec,nosuid,size=1m
+      - /tmp:rw,noexec,nosuid,size=4m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["node", "src/bot.mjs"]
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      SPOTSIGNAL_API_URL: http://api:3000
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:?set BOT_TOKEN in Codespaces secrets}
+      BOT_INGEST_TOKEN: ${BOT_INGEST_TOKEN:?run scripts/codespace-up.sh first}
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+volumes:
+  spotsignal-db:
